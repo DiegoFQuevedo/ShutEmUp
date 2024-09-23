@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _mover.speed = _speed;
-        InputKeyboardListener.Instance.OnHasShoot += OnHasShoot;
+        InputProvider.OnHasShoot += OnHasShoot;
+        InputProvider.OnDirection += OnDirection;
     }
 
     void Update()
@@ -37,11 +38,14 @@ public class PlayerController : MonoBehaviour
         Instantiate(_shootPrefab, _shootOrigin, false);
     }
 
+    private void OnDirection(Vector3 direction) 
+    {
+        _mover.direction = direction;
+    }
+
+
     private void PlayerMovement() 
     {
-        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), transform.position.z);
-        _mover.direction = direction;
-
         float x = Mathf.Clamp(transform.position.x, _boundary._xMinimum, _boundary._xMaximum);
         float y = Mathf.Clamp(transform.position.y, _boundary._yMinimum, _boundary._yMaximum);
         transform.position = new Vector3(x, y);
