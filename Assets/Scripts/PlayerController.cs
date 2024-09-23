@@ -9,7 +9,6 @@ using UnityEngine;
 [Serializable] public class Boundary
 {
     public float _xMinimum, _xMaximum, _yMinimum, _yMaximum;
-
 }
 
 public class PlayerController : MonoBehaviour
@@ -25,16 +24,17 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _mover.speed = _speed;
+        InputKeyboardListener.Instance.OnHasShoot += OnHasShoot;
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Shoot"))
-        {
-            Instantiate(_shootPrefab, _shootOrigin, false);
-        }
-
         PlayerMovement();
+    }
+
+    private void OnHasShoot() 
+    {
+        Instantiate(_shootPrefab, _shootOrigin, false);
     }
 
     private void PlayerMovement() 
