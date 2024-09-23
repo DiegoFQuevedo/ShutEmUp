@@ -1,6 +1,11 @@
 using System;
 using UnityEngine;
 
+//ToDo: shoot system changes - multiples _shootOrigin's (maybe a list) can switch beetween "x" modes.
+//      Modes: - Single shot
+//             - Mulpliple shots
+//             - 
+
 [Serializable] public class Boundary
 {
     public float _xMinimum, _xMaximum, _yMinimum, _yMaximum;
@@ -11,23 +16,34 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private Mover _mover;
-    public Boundary _boundary;
+    [SerializeField] private Transform _shootOrigin;
+    [SerializeField] private GameObject _shootPrefab;
 
+    public Boundary _boundary;
 
 
     void Start()
     {
-        _mover = GetComponent<Mover>();
+        _mover.speed = _speed;
     }
 
     void Update()
     {
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal") * _speed * Time.deltaTime, Input.GetAxis("Vertical") * _speed * Time.deltaTime, transform.position.z);
-        _mover.DoMove(movement);
+        if (Input.GetButtonDown("Shoot"))
+        {
+            Instantiate(_shootPrefab, _shootOrigin, false);
+        }
+
+        PlayerMovement();
+    }
+
+    private void PlayerMovement() 
+    {
+        Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), transform.position.z);
+        _mover.direction = direction;
 
         float x = Mathf.Clamp(transform.position.x, _boundary._xMinimum, _boundary._xMaximum);
         float y = Mathf.Clamp(transform.position.y, _boundary._yMinimum, _boundary._yMaximum);
-
-        transform.position = new Vector3(x,y);
+        transform.position = new Vector3(x, y);
     }
 }

@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Mover : MonoBehaviour
 {
-    public void DoMove(Vector3 moverValue) 
+    [SerializeField] public Vector3 direction;
+    [SerializeField] public float speed;
+
+    private void Update()
     {
-        transform.Translate(moverValue);
+        transform.Translate(direction * speed * Time.deltaTime);
     }
 }
